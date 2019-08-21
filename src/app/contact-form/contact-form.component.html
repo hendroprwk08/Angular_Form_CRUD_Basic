@@ -1,0 +1,51 @@
+<form [formGroup]="fg" (ngSubmit)="addPost(fg.value)">
+    <h2>Reactive form Angular</h2>
+    <p>Form Values: {{  fg.value | json }}</p>
+    <p>Form Status: {{  fg.status }}</p>
+
+    <div class="form-group">
+        <label for="nama">Nama</label>
+        <input type="text" formControlName="nama" id="nama" class="form-control" required/>        
+        <small class="form-text text-muted">Harus terisi, minimal 3 karakter</small>
+    </div>
+
+    <div *ngIf="f.nama.errors"><!-- kalo ada error munculkan -->
+        <!-- touched = maksudnya sudah tersentuh atau sudah fokus oleh kursor -->
+        <div class="alert alert-danger" *ngIf="f.nama.touched && f.nama.errors.required">Nama harus terisi</div>
+        <div class="alert alert-warning" *ngIf="f.nama.touched && f.nama.errors.minlength">Minimal 3 karakter</div>
+    </div>
+
+    <div class="form-group">
+        <label for="deskripsi">Deskripsi</label>
+        <textarea id="deskripsi" formControlName="deskripsi" cols="30" rows="2" class="form-control" required></textarea>
+        <small class="form-text text-muted">Harus terisi, minimal 10 hingga 500 karakter</small>
+    </div>
+
+    <div *ngIf="f.deskripsi.errors"><!-- kalo ada error munculkan -->
+        <div class="alert alert-warning" *ngIf="f.deskripsi.touched && f.deskripsi.errors.required">Apa deskripsi tentang diri Anda</div>
+        <div class="alert alert-warning" *ngIf="f.deskripsi.touched && f.deskripsi.errors.minlength">Deskripsi minimal 10 karakter</div>      
+        <div class="alert alert-warning" *ngIf="f.deskripsi.touched && f.deskripsi.errors.maxlength">Deskripsi maksimal 500 karakter</div>      
+    </div>
+
+    <div class="form-group">
+        <label for="usia">Usia</label>
+        <input type="text" formControlName="usia" id="usia" value="0" class="form-control" required/>        
+        <small class="form-text text-muted">Harus terisi, usia 18 - 65 tahun</small>
+    </div>
+
+    <div *ngIf="f.usia.errors"><!-- kalo ada error munculkan -->
+        <div class="alert alert-warning" *ngIf="f.usia.touched && f.usia.errors.min">Usia {{ usia.min.actual }}: masih dibawah umur</div>  
+        <div class="alert alert-warning" *ngIf="f.usia.touched && f.usia.errors.max">Usia {{ usia.max.actual }}: terlalu tua</div>  
+    </div>
+
+    <p><input type="checkbox" formControlName="valid">&nbsp;Valid</p>
+   
+    <div *ngIf="f.valid.errors"><!-- kalo ada error munculkan -->
+        <div class="alert alert-warning" *ngIf="f.valid.touched && f.valid.requiredtrue">Centang jika setuju</div>
+    </div>
+
+    <!-- kalo tombol submit (ngSubmit) pakenya, kalo button pake (click) --> 
+    <button class="btn btn-primary" [disabled]="fg.invalid">Submit</button>&nbsp;    
+    <button class="btn btn-info" [disabled]="fg.invalid" (click)="addPost(fg.value)">Klik</button>&nbsp;     
+    <button class="btn btn-warning" (click)="onReset()">Reset</button>    
+</form>

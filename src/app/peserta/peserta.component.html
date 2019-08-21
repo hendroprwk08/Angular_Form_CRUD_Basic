@@ -1,0 +1,114 @@
+<div class="btn-group btn-group-toggle" style="margin-bottom:20px" data-toggle="buttons">
+    <label [className]="mode==='list' ? 'btn btn-primary active' : 'btn btn-outline-primary'"> <!--  class="btn btn-primary active"-->
+        <input type="radio" name="options" id="option1" autocomplete="off" (click)="_list()"> Tabel
+    </label>
+    <label [className]="mode==='add' ? 'btn btn-primary active' : 'btn btn-outline-primary'">
+        <input type="radio" name="options" id="option2" autocomplete="off" (click)="_add()"> Tambah
+    </label>
+</div>
+    
+<p>Mode: {{  mode }}</p>
+<p>Complete: {{  complete }}</p>
+
+<div *ngIf="complete === false"><img src="assets/loader.gif"></div>            
+
+<ng-container *ngIf="mode==='add'">
+    <form [formGroup]="fg" (ngSubmit)="_onPost(fg.value)">
+        <h2>Peserta</h2>
+        <p>Form Values: {{  fg.value | json }}</p>
+        <p>Form Status: {{  fg.status }}</p>
+    
+        <div class="form-group">
+            <label for="nama">Nama</label>
+            <input type="text" formControlName="nama" id="nama" class="form-control" required/>        
+            <small class="form-text text-muted">Harus terisi, minimal 3 karakter</small>
+        </div>
+    
+        <div *ngIf="f.nama.errors"><!-- kalo ada error munculkan -->
+            <!-- touched = maksudnya sudah tersentuh atau sudah fokus oleh kursor -->
+            <div class="alert alert-danger" *ngIf="f.nama.touched && f.nama.errors.required">Nama harus terisi</div>
+            <div class="alert alert-warning" *ngIf="f.nama.touched && f.nama.errors.minlength">Minimal 3 karakter</div>
+        </div>
+    
+        <div class="form-group">
+            <label for="institusi">Institusi</label>
+            <input type="text" id="institusi" formControlName="institusi" class="form-control"/>
+            <small class="form-text text-muted">Harus terisi, minimal 10 hingga 500 karakter</small>
+        </div>
+
+        <div *ngIf="f.institusi.errors"><!-- kalo ada error munculkan -->
+            <div class="alert alert-warning" *ngIf="f.institusi.touched && f.institusi.errors.required">Institusi belum diisi</div>
+            <div class="alert alert-warning" *ngIf="f.institusi.touched && f.institusi.errors.minlength">institusi minimal 10 karakter</div>      
+            <div class="alert alert-warning" *ngIf="f.institusi.touched && f.institusi.errors.maxlength">institusi maksimal 100 karakter</div>      
+        </div>    
+    
+        <div class="form-group">
+            <label for="whatsapp">Whatsapp</label>
+            <input type="text" id="whatsapp" formControlName="whatsapp" class="form-control" maxlength="15"/>
+            <small class="form-text text-muted">minimal 7 hingga 15 karakter</small>
+        </div>
+
+        <div *ngIf="f.whatsapp.errors"><!-- kalo ada error munculkan -->
+            <!-- touched = maksudnya sudah tersentuh atau sudah fokus oleh kursor -->
+            <div class="alert alert-danger" *ngIf="f.whatsapp.touched && f.whatsapp.errors.required">Nomer harus terisi</div>
+            <div class="alert alert-warning" *ngIf="f.whatsapp.touched && f.whatsapp.errors.minlength">Minimal 7 karakter</div>
+            <div class="alert alert-warning" *ngIf="f.whatsapp.touched && f.whatsapp.errors.maxlength">Maksimal 15 karakter</div>
+        </div>
+    
+        <div class="form-group">
+            <label for="telepon">Telepon</label>
+            <input type="text" id="telepon" formControlName="telepon" class="form-control" maxlength="15"/>
+            <small class="form-text text-muted">minimal 7 hingga 15 karakter</small>
+        </div>        
+    
+        <div *ngIf="f.telepon.errors"><!-- kalo ada error munculkan -->
+            <!-- touched = maksudnya sudah tersentuh atau sudah fokus oleh kursor -->
+            <div class="alert alert-danger" *ngIf="f.telepon.touched && f.telepon.errors.required">Nomer harus terisi</div>
+            <div class="alert alert-warning" *ngIf="f.telepon.touched && f.telepon.errors.minlength">Minimal 7 karakter</div>
+            <div class="alert alert-warning" *ngIf="f.telepon.touched && f.telepon.errors.maxlength">Maksimal 15 karakter</div>
+        </div>
+    
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="text" id="email" formControlName="email" class="form-control"/>
+        </div>
+
+        <div *ngIf="f.email.errors"><!-- kalo ada error munculkan -->
+            <!-- touched = maksudnya sudah tersentuh atau sudah fokus oleh kursor -->
+            <div class="alert alert-danger" *ngIf="f.email.touched && f.email.errors.required">Email harus terisi</div>
+            <div class="alert alert-warning" *ngIf="f.email.touched && f.email.errors.email">Format email perlu diperhatikan</div>
+        </div>
+    
+        <!-- kalo tombol submit (ngSubmit) pakenya, kalo button pake (click) --> 
+        <button class="btn btn-primary" [disabled]="fg.invalid">Submit</button>&nbsp;    
+        <button class="btn btn-warning" (click)="_onReset()">Reset</button>    
+    </form>
+            
+</ng-container>
+
+<ng-container *ngIf="mode==='edit'">
+    <p>edit</p>
+</ng-container>
+
+<ng-container *ngIf="mode==='list'">
+    <!-- (click)="_list()" -->
+
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Nama</th>
+                <th scope="col">Institusi</th>
+                <th scope="col">Whatsapp</th>
+                <th scope="col">&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of output">
+                <td scope="row">{{ item.name }} <br/> {{ item.email }} </td>
+                <td>{{ item.institution }}</td>
+                <td>{{ item.whatsapp }} <br/>{{ item.phone }} </td>
+                <td><a href="javascript:void(0)" type="button" class="btn btn-primary btn-sm" (click)="_edit(item._id)" >Edit</a></td>
+            </tr>
+        </tbody>        
+    </table>
+</ng-container>
