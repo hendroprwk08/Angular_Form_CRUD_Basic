@@ -9,9 +9,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 //import
-import { PesertaComponent } from './peserta/peserta.component'; 
-import { ContactFormComponent } from './contact-form/contact-form.component';
-import { MainComponent } from './main/main.component'; 
+import { PesertaComponent } from './pages/peserta/peserta.component'; 
+import { ContactFormComponent } from './pages/contact-form/contact-form.component';
+import { MainComponent } from './pages/main/main.component';
+import { UploadComponent } from './modules/upload/upload.component'; 
 
 /*
 component diletakkan pada "declaration"
@@ -23,7 +24,8 @@ fitur-fitur diletakkan pada "imports"
     AppComponent,    
     MainComponent,
     PesertaComponent,
-    ContactFormComponent    
+    ContactFormComponent,
+    UploadComponent    
   ],
   imports: [
     NgbModule,

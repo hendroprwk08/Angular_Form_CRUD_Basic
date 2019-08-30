@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
-import { PesertaApiService } from '../services/peserta-api.service';
+import { PesertaApiService } from 'src/app/services/peserta-api.service';
+import { UploadService } from 'src/app/services/upload.service';
 
 @Component({
   selector: 'app-peserta',
@@ -15,10 +16,16 @@ export class PesertaComponent implements OnInit {
   mode:string = "list";
   complete:boolean;
   info:string;
+  imgURL:string;
+  selectedFile:File = null;
 
-  constructor(private fb: FormBuilder, public pesertaApiService: PesertaApiService){
+  constructor( private fb: FormBuilder, 
+    public pesertaApiService: PesertaApiService, 
+    public uploadService: UploadService){
+
     //atur validasi -> pertama load
     this.fg = fb.group({
+      'image':[null],
       'action': ['1'],
       'id': [null],
       'name': [null, [
@@ -126,4 +133,31 @@ export class PesertaComponent implements OnInit {
   }
 
   ngOnInit() { this._list() }
+
+  _preview(event:any){
+    console.log(event);
+    var reader = new FileReader();
+
+    reader.onload = (event: any) => {
+        this.imgURL = event.target.result; //ambil nilai gambar agar bisa di "preview"
+        this.fg.controls.image.setValue(this.imgURL); //set ke Form Group
+    }
+
+    //event.target.files[0] tak bisa ditampilkan pada console.log
+    reader.readAsDataURL(event.target.files[0]);
+
+    //mengambil properti gambar: ukuran, jenis, url file sekaligus casting
+    this.selectedFile = <File>event.target.files[0]; 
+  }
+
+  _removeImage(){
+    this.imgURL = null;
+    this.fg.controls.image.setValue(null);
+  }
+
+  _upload(){
+    this.uploadService.upload(this.selectedFile).subscribe((output:any) => {
+      console.log(output);
+    });
+  }
 }

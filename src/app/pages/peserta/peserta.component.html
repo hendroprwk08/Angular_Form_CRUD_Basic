@@ -27,7 +27,7 @@
     </div>
 </ng-container>
 <ng-container *ngIf="mode==='add'">
-    <form [formGroup]="fg" (ngSubmit)="_post(fg.value)">
+    <form [formGroup]="fg" type (ngSubmit)="_post(fg.value)">
         <h2>Peserta</h2>
         
         <p>
@@ -35,6 +35,14 @@
             <small>Form Status: {{  fg.status }}</small>        
         </p>
 
+        <div class="form-group">
+            <label for="photo">Foto</label>
+            <input type="file" (change)="_preview($event)" class="form-control"/>            
+            <small class="form-text text-muted">Opsional</small>
+            <img [src]="imgURL" height="200" *ngIf="imgURL" style="margin:10px 0px"><br/>
+            <button  *ngIf="imgURL" (click)="_removeImage()" class="btn btn-danger btn-sm" >Hapus</button>    
+        </div>
+    
         <div class="form-group">
             <label for="name">Nama</label>
             <input type="text" formControlName="name" id="name" class="form-control" required/>        
@@ -113,6 +121,14 @@
             <small>Form Status: {{  fg.status }}</small>        
         </p>
         
+        <div class="form-group">
+            <label for="photo">Foto</label>
+            <input type="file" (change)="_preview($event)" class="form-control"/>            
+            <small class="form-text text-muted">Opsional</small>
+            <img [src]="imgURL" height="200" *ngIf="imgURL" style="margin:10px 0px"><br/>
+            <button  *ngIf="imgURL" (click)="_removeImage()" class="btn btn-danger btn-sm" >Hapus</button>    
+        </div>
+    
         <div class="form-group">
             <label for="name">Nama</label>
             <input type="text" formControlName="name" id="name" class="form-control" required/>        
