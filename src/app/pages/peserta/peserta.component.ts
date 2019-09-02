@@ -25,7 +25,7 @@ export class PesertaComponent implements OnInit {
 
     //atur validasi -> pertama load
     this.fg = fb.group({
-      'image':[null],
+      //'image':[null],
       'action': ['1'],
       'id': [null],
       'name': [null, [
@@ -140,7 +140,7 @@ export class PesertaComponent implements OnInit {
 
     reader.onload = (event: any) => {
         this.imgURL = event.target.result; //ambil nilai gambar agar bisa di "preview"
-        this.fg.controls.image.setValue(this.imgURL); //set ke Form Group
+        //this.fg.controls.image.setValue(this.imgURL); //set ke Form Group
     }
 
     //event.target.files[0] tak bisa ditampilkan pada console.log

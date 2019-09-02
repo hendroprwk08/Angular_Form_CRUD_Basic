@@ -13,7 +13,7 @@ export class UploadService {
 
   public upload(selectedFile: File){
     return Observable.create(observer => {
-      const url = "http://event-lcc-me.000webhostapp.com/peserta.php";
+      const url = "http://localhost:80/peserta.php";
     
       const fd = new FormData();
       fd.append('image', selectedFile, selectedFile.name);
