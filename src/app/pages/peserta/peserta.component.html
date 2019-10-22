@@ -36,11 +36,14 @@
         </p>
 
         <div class="form-group">
-            <label for="photo">Foto</label>
-            <input type="file" (change)="_preview($event)" class="form-control"/>            
-            <small class="form-text text-muted">Opsional</small>
-            <img [src]="imgURL" height="200" *ngIf="imgURL" style="margin:10px 0px"><br/>
-            <button  *ngIf="imgURL" (click)="_removeImage()" class="btn btn-danger btn-sm" >Hapus</button>    
+            <label for="photo">Foto</label><br/>
+            <small class="form-text text-muted">Opsional</small>            
+            <label class="btn btn-warning">Upload Image<input type="file" id="selectFile" (change)="_preview($event)" hidden></label>
+            <div *ngIf="imgURL">
+                <img [src]="imgURL" height="200" style="margin:10px 0px"><br/>
+                <button (click)="_removeImage()" class="btn btn-danger btn-sm" >Hapus</button>                    
+                <button (click)="_upload()" class="btn btn-info btn-sm" >Upload</button>      
+            </div>
         </div>
     
         <div class="form-group">

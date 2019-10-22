@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 //MODULE
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -11,25 +12,13 @@ export class UploadService {
 
   constructor(private http:HttpClient) { }
 
-  public upload(selectedFile: File){
-    return Observable.create(observer => {
-      const url = "http://localhost:80/peserta.php";
-    
-      const fd = new FormData();
-      fd.append('image', selectedFile, selectedFile.name);
-      //console.log(url);
-    
-      this.http.post('url', fd).subscribe((respond:any) => {
-        let outputs:any = {};
-  
-        //let data = { "status":respond.status, "data":respond.data};
-        let result = respond;
-        
-        //console.log(result);
-        observer.next(result);
-        observer.complete();
-        return {unsubcribe() {result}};	      
-      });               
-    });
+  public upload(formdata: any){
+    let url:string = "http://localhost:80/php_event_middleware/upload.php"; 
+    return this.http.post(url, formdata).pipe(
+      catchError((error: Response) => {
+        console.error("Error:"+ error);
+        return Observable.throw(error || "Server bermasalah");
+      })
+    );
   }
 }

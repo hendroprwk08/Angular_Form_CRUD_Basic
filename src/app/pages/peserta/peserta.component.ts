@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { PesertaApiService } from 'src/app/services/peserta-api.service';
@@ -17,11 +17,13 @@ export class PesertaComponent implements OnInit {
   complete:boolean;
   info:string;
   imgURL:string;
-  selectedFile:File = null;
+  //selectedFile:File = null;
+  selectedFile:string = null
 
   constructor( private fb: FormBuilder, 
     public pesertaApiService: PesertaApiService, 
-    public uploadService: UploadService){
+    public uploadService: UploadService,
+    public elementRef: ElementRef ){
 
     //atur validasi -> pertama load
     this.fg = fb.group({
@@ -147,7 +149,9 @@ export class PesertaComponent implements OnInit {
     reader.readAsDataURL(event.target.files[0]);
 
     //mengambil properti gambar: ukuran, jenis, url file sekaligus casting
-    this.selectedFile = <File>event.target.files[0]; 
+    //this.selectedFile = <File>event.target.files[0]; 
+    console.log(event.target.files[0]);
+    this.selectedFile = event.target.files[0]; 
   }
 
   _removeImage(){
@@ -156,7 +160,14 @@ export class PesertaComponent implements OnInit {
   }
 
   _upload(){
-    this.uploadService.upload(this.selectedFile).subscribe((output:any) => {
+    let files = this.elementRef.nativeElement.querySelector("#selectFile").files;
+    let formData = new FormData();
+    let file = files[0];
+
+    //ambil data file berdasarkan ID
+    formData.append("selectFile", file, file.name);
+
+    this.uploadService.upload(formData).subscribe((output:any) => {
       console.log(output);
     });
   }
